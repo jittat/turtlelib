@@ -72,10 +72,10 @@ describe('Turtle, interacting with TurtleEngine', function() {
     turtle = new TurtleLib.Turtle({ engine: engine });
   });
 
-  it('should reset turtle engine after the creation', function() {
+  it('should reset the turtle engine', function() {
     var stub = sinon.stub(engine, "reset");
 
-    turtle = new TurtleLib.Turtle({ engine: engine });
+    turtle.reset();
 
     assert.ok(stub.called);
   });
@@ -92,16 +92,19 @@ describe('Turtle, interacting with TurtleEngine', function() {
   });
 
   it('should turn left and right', function() {
-    var stub = sinon.stub(engine, "turnTo");
+    var turnStub = sinon.stub(engine, "turnTo");
+    var moveStub = sinon.stub(engine, "moveTo");
 
     turtle.forward(100);
     turtle.turnRight(90);
     turtle.forward(100);
     turtle.turnLeft(30);
 
-    assert.ok(stub.called);
-    assert.ok(stub.getCall(0).calledWith(90));
-    assert.ok(stub.getCall(1).calledWith(60));
+    assert.ok(turnStub.called);
+    assert.ok(turnStub.getCall(0).calledWith(90));
+    assert.ok(turnStub.getCall(1).calledWith(60));
+
+    assertCallPosCloseTo(moveStub.getCall(1), 100, 100);
   });
 
 });
